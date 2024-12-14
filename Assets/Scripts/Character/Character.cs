@@ -42,13 +42,13 @@ namespace Vampire
         protected CoroutineQueue coroutineQueue;
         protected Coroutine hitAnimationCoroutine = null;
         protected Vector2 moveDirection;
-        public Vector2 LookDirection 
-        { 
-            get { return lookDirection; } 
-            set 
+        public Vector2 LookDirection
+        {
+            get { return lookDirection; }
+            set
             {
                 if (value != Vector2.zero)
-                    lookDirection = value; 
+                    lookDirection = value;
             }
         }
         public Transform CenterTransform { get => centerTransform; }
@@ -110,12 +110,16 @@ namespace Vampire
             // Look in movement direction
             lookIndicator.transform.localPosition = lookDirection * lookIndicatorRadius;
             spriteRenderer.flipX = lookDirection.x < 0;
+            setMouseDirection();
         }
 
         protected virtual void FixedUpdate()
         {
             if (moveDirection != Vector2.zero)
+            {
                 lookDirection = moveDirection;
+                StartWalkAnimation();
+            }
             else
                 StopWalkAnimation();
             if (alive)
@@ -228,7 +232,7 @@ namespace Vampire
             while (t < 1)
             {
                 spriteRenderer.sharedMaterial = deathMaterial;
-                deathParticles.transform.position = transform.position + Vector3.up * height * (1-t);
+                deathParticles.transform.position = transform.position + Vector3.up * height * (1 - t);
                 deathMaterial.SetFloat("_Wipe", t);
                 t += Time.deltaTime;
                 yield return null;
@@ -280,6 +284,20 @@ namespace Vampire
         public void SetMoveDirection(InputAction.CallbackContext context)
         {
             moveDirection = context.action.ReadValue<Vector2>().normalized;
+        }
+
+        public void setMouseDirection()
+        {
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                mouseWorldPosition.z = 0;
+                moveDirection = (mouseWorldPosition - transform.position).normalized;
+            }
+            else
+            {
+                moveDirection = Vector2.zero;
+            }
         }
     }
 }
