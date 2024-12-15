@@ -44,6 +44,12 @@ namespace Vampire
                 levelLostAudioSource.Play();
             }
 
+            // Hentikan semua audio dari BackgroundAudioManager
+            if (BackgroundAudioManager.Instance != null)
+            {
+                BackgroundAudioManager.Instance.SetGameFinished(true);
+            }
+
             // Menampilkan latar belakang
             background.SetActive(true);
             base.Open();

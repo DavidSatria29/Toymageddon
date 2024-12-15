@@ -36,6 +36,7 @@ namespace Vampire
         [SerializeField] private ChestPool chestPool;
         [SerializeField] private GameObject textPrefab;
         [SerializeField] private DamageTextPool textPool;
+        [SerializeField] private AudioSource audioCoinSource;
         [Header("Spatial Hash Grid Settings")]
         [SerializeField] private Vector2 gridSize;
         [SerializeField] private Vector2Int gridDimensions;
@@ -310,6 +311,10 @@ namespace Vampire
         {
             if (pickedUpByPlayer)
             {
+                if(audioCoinSource != null)
+                {
+                    audioCoinSource.Play();
+                }
                 statsManager.IncreaseCoinsGained((int)coin.CoinType);
             }
             coinPool.Release(coin);

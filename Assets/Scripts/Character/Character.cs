@@ -22,6 +22,8 @@ namespace Vampire
         [SerializeField] protected ParticleSystem dustParticles;
         [SerializeField] protected Material defaultMaterial, hitMaterial, deathMaterial;
         [SerializeField] protected ParticleSystem deathParticles;
+        [SerializeField] protected AudioSource audioExpSource;
+        [SerializeField] protected AudioSource audioLevelUpSource;
         protected CharacterBlueprint characterBlueprint;
         protected UpgradeableMovementSpeed movementSpeed;
         protected UpgradeableArmor armor;
@@ -153,6 +155,9 @@ namespace Vampire
                     expBar.Setup(currentExp, prevLevelExp, nextLevelExp);
                 }
                 // Add remaining exp
+                if (audioExpSource != null) { 
+                    audioExpSource.Play();
+                }
                 currentExp += exp;
                 expBar.AddPoints(exp);
             }
@@ -165,6 +170,10 @@ namespace Vampire
                 // Level up
                 currentLevel++;
                 UpdateLevelDisplay();
+                if (audioLevelUpSource != null)
+                {
+                    audioLevelUpSource.Play();
+                }
                 // Open the level up dialog menu
                 abilitySelectionDialog.Open();
                 // Wait for the menu to be closed
